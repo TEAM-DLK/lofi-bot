@@ -1,37 +1,46 @@
-import logging
-from telegram import Update
-from telegram.ext import Updater, CommandHandler, CallbackContext
 import requests
+from telegram import Bot
+from telegram.ext import Updater, CommandHandler
 
-# Set up logging
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-# Command to generate Lo-Fi beat
-def generate_beat(update: Update, context: CallbackContext) -> None:
-    # Example API call for Lo-Fi beat (replace with real API URL)
-    api_url = "https://lofi-generator.com/api/generate"
-    response = requests.get(api_url)
+# Function to download song from SoundCloud
+def download_song(update, context):
+    # Get the URL sent by the user
+    song_url = ' '.join(context.args)
     
-    # Check if beat generated successfully
-    if response.status_code == 200:
-        audio_url = response.json().get('audio_url')  # Example response structure
-        context.bot.send_audio(chat_id=update.message.chat_id, audio=audio_url)
+    if song_url:
+        url = "https://soundcloud-songs-downloader.p.rapidapi.com/"
+        payload = {"url": song_url}
+        headers = {
+            "x-rapidapi-key": "a850f0e046msh09fcc3ee5253422p15c903jsna96a5d25b3b9",
+            "x-rapidapi-host": "soundcloud-songs-downloader.p.rapidapi.com",
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+
+        # Make the API request to SoundCloud Downloader
+        response = requests.post(url, data=payload, headers=headers)
+        
+        # If the request was successful, send the download link to the user
+        if response.status_code == 200:
+            data = response.json()
+            if 'url' in data:
+                download_link = data['url']
+                update.message.reply_text(f"Here is your download link: {download_link}")
+            else:
+                update.message.reply_text("Sorry, I couldn't find the song.")
+        else:
+            update.message.reply_text("There was an error retrieving the song.")
     else:
-        update.message.reply_text('Sorry, there was an error generating the beat.')
+        update.message.reply_text("Please provide a valid SoundCloud song URL.")
 
+# Set up the Telegram bot with the API token
 def main():
-    # Insert your bot token here
-    updater = Updater("8169213464:AAFaUt1wltBhmy-8WckFcfMOynFPgyeO7KY", use_context=True)
-
-    # Get the dispatcher to register handlers
+    updater = Updater("YOUR_TELEGRAM_BOT_API_TOKEN", use_context=True)
     dp = updater.dispatcher
 
-    # Register command handler
-    dp.add_handler(CommandHandler("generate", generate_beat))
+    # Add the command handler for '/download'
+    dp.add_handler(CommandHandler("download", download_song))
 
-    # Start the Bot
+    # Start the bot
     updater.start_polling()
     updater.idle()
 
