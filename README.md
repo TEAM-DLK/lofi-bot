@@ -1,10 +1,10 @@
-<div align="center">  lofi-bot/ 
+<div align="center">lofi-bot/ 
 </div>
-#bot.py
+<div align="center">bot.py
 </div>
-#requirements.txt
+<div align="center">requirements.txt
 </div>
-#Procfile
+<div align="center">Procfile
 </div>
-#runtime.txt
+<div align="center">runtime.txt
 </div>
