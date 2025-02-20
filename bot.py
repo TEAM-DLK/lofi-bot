@@ -1,9 +1,9 @@
 import requests
-from telegram import Bot
-from telegram.ext import Updater, CommandHandler
+from telegram import Update
+from telegram.ext import Application, CommandHandler, ContextTypes
 
 # Function to download song from SoundCloud
-def download_song(update, context):
+async def download_song(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Get the URL sent by the user
     song_url = ' '.join(context.args)
     
@@ -24,25 +24,23 @@ def download_song(update, context):
             data = response.json()
             if 'url' in data:
                 download_link = data['url']
-                update.message.reply_text(f"Here is your download link: {download_link}")
+                await update.message.reply_text(f"Here is your download link: {download_link}")
             else:
-                update.message.reply_text("Sorry, I couldn't find the song.")
+                await update.message.reply_text("Sorry, I couldn't find the song.")
         else:
-            update.message.reply_text("There was an error retrieving the song.")
+            await update.message.reply_text("There was an error retrieving the song.")
     else:
-        update.message.reply_text("Please provide a valid SoundCloud song URL.")
+        await update.message.reply_text("Please provide a valid SoundCloud song URL.")
 
 # Set up the Telegram bot with the API token
 def main():
-    updater = Updater("8169213464:AAFaUt1wltBhmy-8WckFcfMOynFPgyeO7KY", use_context=True)
-    dp = updater.dispatcher
+    application = Application.builder().token("8169213464:AAFaUt1wltBhmy-8WckFcfMOynFPgyeO7KY").build()
 
     # Add the command handler for '/download'
-    dp.add_handler(CommandHandler("download", download_song))
+    application.add_handler(CommandHandler("download", download_song))
 
     # Start the bot
-    updater.start_polling()
-    updater.idle()
+    application.run_polling()
 
 if __name__ == '__main__':
     main()
