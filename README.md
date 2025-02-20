@@ -23,5 +23,5 @@ Follow the steps below to deploy this bot on Heroku:
 
 ### 1. Clone the repository:
 ```bash
-git clone https://github.com/YOUR_USERNAME/lofi-bot.git
+git clone https://github.com/TEAM-DLK/lofi-bot.git
 cd lofi-bot
