@@ -23,7 +23,7 @@ def generate_beat(update: Update, context: CallbackContext) -> None:
 
 def main():
     # Insert your bot token here
-    updater = Updater("YOUR_BOT_API_TOKEN", use_context=True)
+    updater = Updater("8169213464:AAFaUt1wltBhmy-8WckFcfMOynFPgyeO7KY", use_context=True)
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
