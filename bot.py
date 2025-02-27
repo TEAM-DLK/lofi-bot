@@ -34,7 +34,7 @@ async def download_song(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # Set up the Telegram bot with the API token
 def main():
-    application = Application.builder().token("8169213464:AAFaUt1wltBhmy-8WckFcfMOynFPgyeO7KY").build()
+    application = Application.builder().token("8169213464:AAFaUt1wltBhmy-XxX").build()
 
     # Add the command handler for '/download'
     application.add_handler(CommandHandler("download", download_song))
